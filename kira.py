@@ -26,6 +26,18 @@ def answer_with_because():
     answer = "Because"
     return answer    
 
+def answer_with_spelling(question):
+    bucket_of_all_the_words = question.split(" ")
+    for this_word in bucket_of_all_the_words:
+        if "-" in this_word:
+            word_to_spell = this_word
+
+            answer_word = word_to_spell.replace("-", "")
+
+            return "It spells " + answer_word
+            
+    answer = "It spells I DON'T KNOW"
+    return answer    
 
 while (True):
     print
@@ -37,6 +49,7 @@ while (True):
     the_question_starts_with_what_colour = question.lower().startswith("what colour")
     the_question_starts_with_why = question.lower().startswith("why")
     the_question_starts_with_do = question.lower().startswith("do")
+    the_question_has_dashes = "-" in question
 
     if the_question_starts_with_is:
         answer = answer_with_yes_or_no()
@@ -46,6 +59,8 @@ while (True):
         answer = answer_with_do()
     elif the_question_starts_with_do:
         answer = answer_with_yes_or_no()
+    elif the_question_has_dashes:
+        answer = answer_with_spelling(question)
     else:
         answer = answer_with_number()
 
