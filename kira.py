@@ -1,4 +1,5 @@
 import random
+import datetime
 from os import system
 
 print 'hello Kira.'
@@ -34,14 +35,23 @@ def answer_with_because():
     answer = "Because"
     return answer    
 
+def answer_with_time():
+    now = datetime.datetime.now()
+    answer = "%d:%d" %(now.hour, now.minute)
+    system("say " + "it is " + answer)
+    return answer    
+
 def answer_with_spelling(question):
     bucket_of_all_the_words = question.split(" ")
     for this_word in bucket_of_all_the_words:
         if "-" in this_word:
             word_to_spell = this_word
 
-            answer_word = word_to_spell.replace("-", "")
+            letters_in_answer_word = word_to_spell.replace("-", ". ")
+            letters_in_answer_word += ". "
 
+            answer_word = word_to_spell.replace("-", "")
+            system("say " + letters_in_answer_word + " spells " + answer_word)
             return "It spells " + answer_word
 
     answer = "It spells I DON'T KNOW"
@@ -73,6 +83,7 @@ while (True):
     the_question_has_math_sign = ("+" in question) or ("-" in question) or ("*" in question)
     the_question_starts_with_say = question.lower().startswith("say")
     the_question_has_weather = "weather" in question.lower()
+    the_question_is_what_time_is_it = "what time is it" in question.lower()
 
     if the_question_starts_with_is:
         answer = answer_with_yes_or_no()
@@ -90,6 +101,8 @@ while (True):
         answer = say_what_comes_after(question)
     elif the_question_has_weather:
         answer = answer_with_weather()
+    elif the_question_is_what_time_is_it:
+        answer = answer_with_time()
     else:
         answer = answer_with_number()
 
