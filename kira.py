@@ -34,6 +34,16 @@ def answer_with_because():
     answer = "For a reason I do not know."
     return answer    
 
+def answer_with_alphabet():
+    import string
+
+    system("say here is the alphabet song")
+
+    system("afplay alphabet_song.m4a")
+
+    answer = "The alphabet is " + "-".join(string.lowercase)
+    return answer    
+
 def answer_with_time():
     now = datetime.datetime.now()
     hour = now.hour
@@ -88,12 +98,15 @@ while (True):
     the_question_has_math_sign = ("+" in question) or ("-" in question) or ("*" in question)
     the_question_starts_with_say = question.lower().startswith("say")
     the_question_has_weather = "weather" in question.lower()
+    the_question_has_alphabet = "alphabet" in question.lower()
     the_question_is_what_time_is_it = "what time is it" in question.lower()
 
     if (the_question_starts_with_is or 
         the_question_starts_with_are or
         the_question_starts_with_will):
         answer = answer_with_yes_or_no()
+    elif the_question_has_alphabet:
+        answer = answer_with_alphabet()
     elif the_question_starts_with_what_colour:
         answer = answer_with_colour()
     elif the_question_starts_with_why:
