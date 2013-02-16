@@ -18,7 +18,7 @@ def answer_with_yes_or_no():
     return answer    
 
 def answer_with_number():
-    answer = random.randint(0, 10)
+    answer = random.randint(0, 100)
     return answer    
 
 def answer_with_colour():
@@ -28,17 +28,21 @@ def answer_with_colour():
 def answer_with_weather():
     weather = random.choice(["sunny", "cloudy", "rainy", "foggy", "snowy", "windy"])
     answer = "The weather today is " + weather
-    system("say " + answer)
     return answer    
 
 def answer_with_because():
-    answer = "Because"
+    answer = "For a reason I do not know."
     return answer    
 
 def answer_with_time():
     now = datetime.datetime.now()
-    answer = "%d:%d" %(now.hour, now.minute)
-    system("say " + "it is " + answer)
+    hour = now.hour
+    minute = now.minute
+    am_pm = "a.m."
+    if hour > 12:
+        hour = hour - 12
+        am_pm = "p.m."
+    answer = "it is %d:%d %s" %(hour, minute, am_pm)
     return answer    
 
 def answer_with_spelling(question):
@@ -51,8 +55,8 @@ def answer_with_spelling(question):
             letters_in_answer_word += ". "
 
             answer_word = word_to_spell.replace("-", "")
-            system("say " + letters_in_answer_word + " spells " + answer_word)
-            return "It spells " + answer_word
+            answer = letters_in_answer_word + " spells " + answer_word
+            return answer
 
     answer = "It spells I DON'T KNOW"
     return answer    
@@ -60,22 +64,23 @@ def answer_with_spelling(question):
 def answer_with_math_answer(question):
     answer = eval(question)
     question_to_speak = question.replace("+", " plus ").replace("-", " minus ").replace("*", " times ")
-    system("say " + question_to_speak)
-    system("say equals " + str(answer))
-    return answer    
+    response = question_to_speak + " equals " + str(answer)
+    return response
 
 def say_what_comes_after(question):
     words_to_say = question.replace("say", "")
-    system("say " + words_to_say)
-    return "I said it!"    
+    return words_to_say    
 
 while (True):
     print
     question = raw_input("ask me a question: ")
     if not question:
         continue
+    question = question.strip()
 
     the_question_starts_with_is = question.lower().startswith("is")
+    the_question_starts_with_are = question.lower().startswith("are")
+    the_question_starts_with_will = question.lower().startswith("will")
     the_question_starts_with_what_colour = question.lower().startswith("what colour")
     the_question_starts_with_why = question.lower().startswith("why")
     the_question_starts_with_do = question.lower().startswith("do")
@@ -85,12 +90,14 @@ while (True):
     the_question_has_weather = "weather" in question.lower()
     the_question_is_what_time_is_it = "what time is it" in question.lower()
 
-    if the_question_starts_with_is:
+    if (the_question_starts_with_is or 
+        the_question_starts_with_are or
+        the_question_starts_with_will):
         answer = answer_with_yes_or_no()
     elif the_question_starts_with_what_colour:
         answer = answer_with_colour()
     elif the_question_starts_with_why:
-        answer = answer_with_do()
+        answer = answer_with_because()
     elif the_question_starts_with_do:
         answer = answer_with_yes_or_no()
     elif the_question_has_spell:
@@ -107,14 +114,22 @@ while (True):
         answer = answer_with_number()
 
 
-    print "my answer is ", answer
+    print answer
+    system("say " + str(answer))
+
 
     answer2 = raw_input("""Do you think my answer is right or wrong or neither? 
-    (Type A for right and B for wrong and C for neither and D for sometimes.)""")
+    Type A for right\n
+         B for wrong\n
+         C for neither\n
+         D for sometimes\n
+         E for maybe: """)
     if "A" in answer2.upper():
         response = "I am glad you think my answer is right"
     elif "D" in answer2.upper():
         response = "ok"
+    elif "E" in answer2.upper():
+        response = "maybe, maybe not"
     else:    
         response = "Too bad!"
     print response
